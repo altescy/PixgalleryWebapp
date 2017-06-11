@@ -120,6 +120,9 @@ div {
   #input-search {
     width: 80%;
   }
+  #overlay>* {
+    width: 70%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -143,5 +146,8 @@ div {
     position: fixed;
     top: 12px;
     right: 5px;
+  }
+  #overlay>* {
+    width: 100%;
   }
 }
