@@ -51,6 +51,7 @@ div {
 }
 
 #input-search {
+  display: inline;
   width: 300px;
 }
 
@@ -113,4 +114,34 @@ div {
   -webkit-transform: translateY(-50%) translateX(-50%);
   border: 1px solid #aaa;
   width: 500px;
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  #input-search {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  #libdir-info {
+    visibility: hidden;
+  }
+  #input-search {
+    width: 80%;
+    display: inline;
+  }
+  #search-container {
+    width: 100%;
+}
+  #search-container {
+    margin-top: 10px;
+  }
+  #header>h1 {
+    font-size: 2em;
+  }
+  #sort-container {
+    position: fixed;
+    top: 12px;
+    right: 5px;
+  }
 }

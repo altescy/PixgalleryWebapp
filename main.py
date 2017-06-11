@@ -13,8 +13,6 @@ imglib.sort_by_alphabet()
 
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = IMG_LIBRARY_DIR
-
 
 
 @app.route('/')

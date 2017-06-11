@@ -16,7 +16,7 @@ from search.vgg import load_image, VGG19
 
 BASE_DIR = os.path.dirname(__file__)
 
-FEATS_DIR = os.path.join(BASE_DIR, '..//library/feats')
+FEATS_DIR = os.path.join(BASE_DIR, '../library/feats')
 FEATS_FP = os.path.join(FEATS_DIR, 'feats.pkl')
 FEATS_DIMS = 4096
 
@@ -74,9 +74,7 @@ if __name__ == '__main__':
     feats = {}
     vgg = VGG19()
     
-    for i, fp in enumerate(files):
-        fp = os.path.relpath(fp)
-    
+    for i, fp in enumerate(files):   
         x = np.expand_dims(load_image(fp), axis=0).astype(np.float32)
         
         ft, = vgg(x)
