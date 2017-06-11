@@ -1,0 +1,4 @@
+/search/model/
+!/search/model/lstmembed4096model_160epoch.npz
+/*/__pycache__/*
+*.pyc

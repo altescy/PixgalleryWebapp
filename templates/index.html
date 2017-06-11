@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixgallery</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='css/jquery.flex-images.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <div id="panel"  ondragover="onDragOver(event)" ondrop="onDrop(event)"></div>
+
+  <div id="header">
+    <h1>Pixgallery</h1>
+    <div id="search-container">
+      <form action="/search" method="post" class="form-inline">
+        <input type="text" name="search" id="input-search" class="form-control" placeholder="search" value="{{ sentence }}"/>
+        <button id="btn-search" class="btn btn-default">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </form>
+    </div>
+    <hr />
+    <div id="sort-container">
+      <a id="sort-by-alphabet" class="btn btn-default" href="{{ url_for('index', sort='alphabet') }}">
+        <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+      </a>
+      <a id="sort-by-alphabet-alt" class="btn btn-default" href="{{ url_for('index', sort='alphabet_alt') }}">
+        <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+      </a>
+      <a id="sort-by-alphabet-alt" class="btn btn-default" href="{{ url_for('index', sort='inv') }}">
+        <span class="glyphicon glyphicon-sort"></span>
+      </a>
+    </div>
+    <div id="libdir-info">
+      <p>
+        <span class="glyphicon glyphicon-folder-open"></span>&nbsp&nbsp
+        {{ libdir }}
+      </p>
+    </div>
+
+  </div>
+
+  <div id="gallery" class="flex-images" ondragover="onDragOver(event)" ondrop="onDrop(event)">
+    {% for img in images %}
+      <div class="item" data-w="{{ img.w }}" data-h="{{ img.h }}">
+        <p>{{ img.fn }}</p>
+        <img src="{{ img.src }}">
+      </div>
+    {% endfor %}
+  </div>
+
+  <div id="overlay"></div>
+
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/jquery.flex-images.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
