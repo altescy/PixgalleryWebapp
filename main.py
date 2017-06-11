@@ -1,49 +1,48 @@
 # -*- coding: utf-8 -*-
 
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
 from imglibrary import ImgLibrary, IMG_LIBRARY_DIR
 
 
 imglib = ImgLibrary()
 imglib.reload()
-imglib.load_all()
-imglib.sort_by_alphabet()
 
 
 app = Flask(__name__)
+app.secret_key = 'pixgallery'
 
 
 @app.route('/')
 def index():
-    if request.args.get("sort") == "alphabet":
-        imglib.sort_by_alphabet()
-        imglib.inverse = False
-    elif request.args.get("sort") == "alphabet_alt":
-        imglib.sort_by_alphabet_alt()
-        imglib.inverse = False
-    elif request.args.get("sort") == "inv":
-        imglib.inverse = not imglib.inverse
-    else:
-        redirect(url_for('index'))
+    if 'sentence' not in session:
+        session['sentence'] = ''
     
-    images = imglib()
+    if 'indexs' not in session:
+        session['indexs'] = imglib.argsort_by_alphabet()
+    
+    if request.args.get("sort") == "alphabet":
+        session['indexs'] = imglib.argsort_by_alphabet()
+    elif request.args.get("sort") == "alphabet_alt":
+        session['indexs'] = imglib.argsort_by_alphabet_alt()
+    elif request.args.get("sort") == "inv":
+        session['indexs'] = imglib.inverse(session['indexs'])
+    
+    images = imglib.sort(session['indexs'])
+    
     return render_template('index.html', images=images,
                            libdir=os.path.relpath(IMG_LIBRARY_DIR),
-                           sentence=imglib.sentence)
-
+                           sentence=session['sentence'])
 
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
-        sentence = request.form['search']
-        if sentence:
-            imglib.search(sentence)
-            imglib.sentence = sentence
+        session['sentence'] = request.form['search']
+        if session['sentence']:
+            session['indexs'] = imglib.argsearch(session['sentence'])
     return redirect(url_for('index'))
-
 
 
 # static url cache buster ----
@@ -63,4 +62,4 @@ def dated_url_for(endpoint, **values):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=3000)

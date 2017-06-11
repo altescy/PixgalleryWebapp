@@ -4,6 +4,7 @@ import os
 import base64
 import imghdr
 import pickle
+import numpy as np
 from PIL import Image
 
 from search.search import search_images
@@ -38,40 +39,49 @@ def get_imagelist(imgdir):
     return images
 
 
+def list2str(lst):
+    ret = ''
+    for i in lst:
+        ret += str(i) + ','
+    return ret
+
+def str2intlist(s):
+    ret = []
+    for d in s.split(','):
+        if d:
+            ret += [int(d)]
+    return ret
+
+
 class ImgLibrary:
     def __init__(self, libdir=IMG_LIBRARY_DIR):
         self.libdir  = libdir
-        self.images  = None
-        self.subset  = None
-        self.inverse = False
-        self.sentence = ''
+        self.images  = []
         self.reload()
 
     def __call__(self):
-        return self.invout(self.subset)
-
-    def load_all(self):
-        self.subset = self.images.copy()
-
-    def invout(self, s):
-        if self.inverse:
-            return s[::-1]
-        return s
+        return self.images
 
     def reload(self):
         self.images = get_imagelist(self.libdir)
 
-    def sort_by_alphabet(self):
+    def argsort_by_alphabet(self):
         # sort images into alphabet order
-        if self.subset:
-            self.subset = sorted(self.subset, key=lambda img:img['fn'])
+        if self.images:
+            return list2str(np.argsort([img['fn'] for img in self.images]))
+        return []
     
-    def sort_by_alphabet_alt(self):
-        self.sort_by_alphabet()
-        self.subset = self.subset[::-1]
+    def argsort_by_alphabet_alt(self):
+        return self.inverse(self.argsort_by_alphabet())
     
-    def search(self, sentence):
-        self.sentence = sentence
+    def argsearch(self, sentence):
         files = [img['fn'] for img in self.images]
-        result = search_images(sentence, files)
-        self.subset = [self.images[i] for i in result]
+        return list2str(search_images(sentence, files))
+
+    def sort(self, indexs):
+        indexs = str2intlist(indexs)
+        return [self.images[i] for i in indexs]
+    
+    def inverse(self, s):
+        return list2str(str2intlist(s)[::-1])
+            
