@@ -11,11 +11,15 @@ import numpy as np
 from chainer import serializers
 
 from search.embedder import LSTMEmbed, sentence2ids, N_VOCAB
-from search.make_feats import normalize_norm, FEATS_FP, FEATS_DIMS
 
+BASE_DIR = os.path.dirname(__file__)
 
+FEATS_DIR = os.path.join(BASE_DIR, '../library/feats')
+FEATS_FP = os.path.join(FEATS_DIR, 'feats.pkl')
+FEATS_DIMS = 4096
 
-
+def normalize_norm(x):
+    return x / np.linalg.norm(x, axis=1).reshape(-1, 1)
 
 def search_images(sentence, files):
     lstmembed = LSTMEmbed(N_VOCAB, FEATS_DIMS, train=False)

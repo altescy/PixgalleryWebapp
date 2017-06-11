@@ -7,7 +7,7 @@ import pickle
 from PIL import Image
 
 from search.search import search_images
-from search.make_feats import FEATS_FP
+from search.search import FEATS_FP
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 IMG_LIBRARY_DIR = os.path.abspath('./library/images')
